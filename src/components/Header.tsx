@@ -1,5 +1,5 @@
 import React from 'react';
-import { Wifi, WifiOff, Bell, Settings, Sun, Moon } from 'lucide-react';
+import { Network, Globe, Bell, Settings, Sun, Moon } from 'lucide-react';
 
 interface HeaderProps {
   isConnected: boolean;
@@ -29,12 +29,12 @@ const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center space-x-2">
           {isConnected ? (
             <>
-              <Wifi className="w-5 h-5 text-success-600" />
+              <Network className="w-5 h-5 text-success-600" />
               <span className="text-sm text-success-600 font-medium">Connected</span>
             </>
           ) : (
             <>
-              <WifiOff className="w-5 h-5 text-error-600" />
+              <Globe className="w-5 h-5 text-error-600" />
               <span className="text-sm text-error-600 font-medium">Disconnected</span>
             </>
           )}

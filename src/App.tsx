@@ -13,6 +13,7 @@ import Sidebar from './components/Sidebar';
 // Commenting out Header temporarily to fix import issue
 // import Header from './components/Header';
 import Dashboard from './pages/Dashboard';
+import Devices from './pages/Devices';
 
 // Types
 interface AppState {
@@ -125,7 +126,7 @@ const AppContent: React.FC = () => {
         <main className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/devices" element={<div className="p-6 bg-white dark:bg-gray-800 m-6 rounded-lg"><h1 className="text-2xl font-bold text-gray-900 dark:text-white">Device Management</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
+            <Route path="/devices" element={<Devices />} />
             <Route path="/users" element={<div className="p-6 bg-white dark:bg-gray-800 m-6 rounded-lg"><h1 className="text-2xl font-bold text-gray-900 dark:text-white">User Management</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
             <Route path="/monitoring" element={<div className="p-6 bg-white dark:bg-gray-800 m-6 rounded-lg"><h1 className="text-2xl font-bold text-gray-900 dark:text-white">System Monitor</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
             <Route path="/settings" element={<div className="p-6 bg-white dark:bg-gray-800 m-6 rounded-lg"><h1 className="text-2xl font-bold text-gray-900 dark:text-white">Settings</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
