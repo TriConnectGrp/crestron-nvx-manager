@@ -10,7 +10,8 @@ import {
 
 // Components
 import Sidebar from './components/Sidebar';
-import Header from './components/Header';
+// Commenting out Header temporarily to fix import issue
+// import Header from './components/Header';
 import Dashboard from './pages/Dashboard';
 
 // Types
@@ -20,28 +21,29 @@ interface AppState {
   appVersion: string;
 }
 
+// Simplified Header component inline
+const SimpleHeader: React.FC<{ appVersion: string; darkMode: boolean }> = ({ appVersion, darkMode }) => (
+  <header className="flex items-center justify-between h-16 px-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+    <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+      Crestron NVX Manager
+    </h1>
+    <div className="text-xs text-gray-500 dark:text-gray-400 font-mono">
+      v{appVersion}
+    </div>
+  </header>
+);
+
 // Main App Component with routing logic
 const AppContent: React.FC = () => {
   const location = useLocation();
   
   const [state, setState] = useState<AppState>({
     darkMode: false,
-    isConnected: false,
+    isConnected: true,
     appVersion: '1.0.0'
   });
 
   useEffect(() => {
-    // Initialize app
-    initializeApp();
-    
-    // Check if running in Electron
-    if (window.electronAPI) {
-      // Get app version
-      window.electronAPI.getAppVersion().then(version => {
-        setState(prev => ({ ...prev, appVersion: version }));
-      }).catch(console.error);
-    }
-
     // Check for saved theme preference
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
@@ -49,16 +51,6 @@ const AppContent: React.FC = () => {
       document.documentElement.classList.add('dark');
     }
   }, []);
-
-  const initializeApp = async () => {
-    try {
-      // Simulate connection check
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setState(prev => ({ ...prev, isConnected: true }));
-    } catch (error) {
-      console.error('Failed to initialize app:', error);
-    }
-  };
 
   const toggleDarkMode = () => {
     const newDarkMode = !state.darkMode;
@@ -123,22 +115,20 @@ const AppContent: React.FC = () => {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <Header 
-          isConnected={state.isConnected}
+        {/* Simplified Header */}
+        <SimpleHeader 
           appVersion={state.appVersion}
           darkMode={state.darkMode}
-          onToggleDarkMode={toggleDarkMode}
         />
 
         {/* Page Content */}
         <main className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/devices" element={<div className="p-6"><h1 className="text-2xl font-bold">Device Management</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
-            <Route path="/users" element={<div className="p-6"><h1 className="text-2xl font-bold">User Management</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
-            <Route path="/monitoring" element={<div className="p-6"><h1 className="text-2xl font-bold">System Monitor</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
-            <Route path="/settings" element={<div className="p-6"><h1 className="text-2xl font-bold">Settings</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
+            <Route path="/devices" element={<div className="p-6 bg-white dark:bg-gray-800 m-6 rounded-lg"><h1 className="text-2xl font-bold text-gray-900 dark:text-white">Device Management</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
+            <Route path="/users" element={<div className="p-6 bg-white dark:bg-gray-800 m-6 rounded-lg"><h1 className="text-2xl font-bold text-gray-900 dark:text-white">User Management</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
+            <Route path="/monitoring" element={<div className="p-6 bg-white dark:bg-gray-800 m-6 rounded-lg"><h1 className="text-2xl font-bold text-gray-900 dark:text-white">System Monitor</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
+            <Route path="/settings" element={<div className="p-6 bg-white dark:bg-gray-800 m-6 rounded-lg"><h1 className="text-2xl font-bold text-gray-900 dark:text-white">Settings</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
           </Routes>
         </main>
       </div>
