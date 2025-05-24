@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { 
   Monitor, 
   Settings, 
@@ -20,7 +20,10 @@ interface AppState {
   appVersion: string;
 }
 
-const App: React.FC = () => {
+// Main App Component with routing logic
+const AppContent: React.FC = () => {
+  const location = useLocation();
+  
   const [state, setState] = useState<AppState>({
     darkMode: false,
     isConnected: false,
@@ -70,76 +73,84 @@ const App: React.FC = () => {
     }
   };
 
+  // Dynamic navigation items based on current location
   const navigationItems = [
     {
       id: 'dashboard',
       label: 'Dashboard',
       icon: Monitor,
       path: '/',
-      active: true
+      active: location.pathname === '/'
     },
     {
       id: 'devices',
       label: 'Device Management',
       icon: Activity,
       path: '/devices',
-      active: false
+      active: location.pathname === '/devices'
     },
     {
       id: 'users',
       label: 'User Management',
       icon: Users,
       path: '/users',
-      active: false
+      active: location.pathname === '/users'
     },
     {
       id: 'monitoring',
       label: 'System Monitor',
       icon: Database,
       path: '/monitoring',
-      active: false
+      active: location.pathname === '/monitoring'
     },
     {
       id: 'settings',
       label: 'Settings',
       icon: Settings,
       path: '/settings',
-      active: false
+      active: location.pathname === '/settings'
     }
   ];
 
   return (
-    <Router>
-      <div className="flex h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-        {/* Sidebar */}
-        <Sidebar 
-          navigationItems={navigationItems}
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+      {/* Sidebar */}
+      <Sidebar 
+        navigationItems={navigationItems}
+        darkMode={state.darkMode}
+        onToggleDarkMode={toggleDarkMode}
+      />
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Header */}
+        <Header 
+          isConnected={state.isConnected}
+          appVersion={state.appVersion}
           darkMode={state.darkMode}
           onToggleDarkMode={toggleDarkMode}
         />
 
-        {/* Main Content */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Header */}
-          <Header 
-            isConnected={state.isConnected}
-            appVersion={state.appVersion}
-            darkMode={state.darkMode}
-            onToggleDarkMode={toggleDarkMode}
-          />
-
-          {/* Page Content */}
-          <main className="flex-1 overflow-auto">
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/devices" element={<div className="p-6"><h1 className="text-2xl font-bold">Device Management</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
-              <Route path="/users" element={<div className="p-6"><h1 className="text-2xl font-bold">User Management</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
-              <Route path="/monitoring" element={<div className="p-6"><h1 className="text-2xl font-bold">System Monitor</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
-              <Route path="/settings" element={<div className="p-6"><h1 className="text-2xl font-bold">Settings</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
-            </Routes>
-          </main>
-        </div>
+        {/* Page Content */}
+        <main className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/devices" element={<div className="p-6"><h1 className="text-2xl font-bold">Device Management</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
+            <Route path="/users" element={<div className="p-6"><h1 className="text-2xl font-bold">User Management</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
+            <Route path="/monitoring" element={<div className="p-6"><h1 className="text-2xl font-bold">System Monitor</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
+            <Route path="/settings" element={<div className="p-6"><h1 className="text-2xl font-bold">Settings</h1><p className="text-gray-600 dark:text-gray-400 mt-2">Coming soon...</p></div>} />
+          </Routes>
+        </main>
       </div>
+    </div>
+  );
+};
+
+// Main App wrapper with Router
+const App: React.FC = () => {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 };

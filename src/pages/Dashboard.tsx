@@ -7,89 +7,30 @@ import {
   BarChart3,
   CheckCircle,
   XCircle,
-  AlertTriangle
+  AlertTriangle,
+  WifiOff
 } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
-  // Mock data for demonstration
-  const stats = [
+  // Define the stat structure for empty state
+  const statsConfig = [
     {
       title: 'Total Devices',
-      value: '24',
-      change: '+2',
-      changeType: 'positive',
       icon: Monitor
     },
     {
       title: 'Online Devices',
-      value: '22',
-      change: '91.7%',
-      changeType: 'positive',
       icon: CheckCircle
     },
     {
       title: 'Offline Devices',
-      value: '2',
-      change: '-1',
-      changeType: 'positive',
       icon: XCircle
     },
     {
       title: 'Alerts',
-      value: '3',
-      change: '+1',
-      changeType: 'negative',
       icon: AlertTriangle
     }
   ];
-
-  const recentDevices = [
-    {
-      id: 1,
-      name: 'NVX-D30-01',
-      ip: '192.168.1.101',
-      status: 'online',
-      type: 'Decoder',
-      lastSeen: '2 minutes ago'
-    },
-    {
-      id: 2,
-      name: 'NVX-E30-01',
-      ip: '192.168.1.102',
-      status: 'online',
-      type: 'Encoder',
-      lastSeen: '5 minutes ago'
-    },
-    {
-      id: 3,
-      name: 'NVX-D30-02',
-      ip: '192.168.1.103',
-      status: 'offline',
-      type: 'Decoder',
-      lastSeen: '2 hours ago'
-    },
-    {
-      id: 4,
-      name: 'NVX-E30-02',
-      ip: '192.168.1.104',
-      status: 'warning',
-      type: 'Encoder',
-      lastSeen: '1 minute ago'
-    }
-  ];
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'online':
-        return 'text-success-600 bg-success-100 dark:bg-success-900 dark:text-success-200';
-      case 'offline':
-        return 'text-error-600 bg-error-100 dark:bg-error-900 dark:text-error-200';
-      case 'warning':
-        return 'text-warning-600 bg-warning-100 dark:bg-warning-900 dark:text-warning-200';
-      default:
-        return 'text-gray-600 bg-gray-100 dark:bg-gray-700 dark:text-gray-200';
-    }
-  };
 
   return (
     <div className="p-6 space-y-6">
@@ -115,9 +56,9 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Stats Grid */}
+      {/* Stats Grid - Empty State */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => {
+        {statsConfig.map((stat, index) => {
           const Icon = stat.icon;
           return (
             <div key={index} className="card">
@@ -128,14 +69,10 @@ const Dashboard: React.FC = () => {
                       {stat.title}
                     </p>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                      {stat.value}
+                      0
                     </p>
-                    <p className={`text-sm font-medium ${
-                      stat.changeType === 'positive' 
-                        ? 'text-success-600' 
-                        : 'text-error-600'
-                    }`}>
-                      {stat.change}
+                    <p className="text-sm font-medium text-gray-400">
+                      No data
                     </p>
                   </div>
                   <div className="p-3 bg-primary-100 dark:bg-primary-900 rounded-lg">
@@ -148,9 +85,9 @@ const Dashboard: React.FC = () => {
         })}
       </div>
 
-      {/* Recent Devices */}
+      {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Device List */}
+        {/* Device List - Empty State */}
         <div className="card">
           <div className="card-header">
             <div className="flex items-center justify-between">
@@ -162,30 +99,28 @@ const Dashboard: React.FC = () => {
               </button>
             </div>
           </div>
-          <div className="card-body space-y-4">
-            {recentDevices.map((device) => (
-              <div key={device.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <Monitor className="w-8 h-8 text-gray-400" />
-                  <div>
-                    <p className="font-medium text-gray-900 dark:text-white">
-                      {device.name}
-                    </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {device.ip} • {device.type}
-                    </p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(device.status)}`}>
-                    {device.status}
-                  </span>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {device.lastSeen}
-                  </p>
-                </div>
+          <div className="card-body">
+            <div className="flex flex-col items-center justify-center py-12">
+              <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
+                <WifiOff className="w-8 h-8 text-gray-400" />
               </div>
-            ))}
+              <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                No devices found
+              </h4>
+              <p className="text-gray-500 dark:text-gray-400 text-center mb-4">
+                Start by adding or discovering NVX devices on your network
+              </p>
+              <div className="flex space-x-3">
+                <button className="bg-primary-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors duration-200 flex items-center space-x-2">
+                  <Plus className="w-4 h-4" />
+                  <span>Add Device</span>
+                </button>
+                <button className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200 flex items-center space-x-2">
+                  <Search className="w-4 h-4" />
+                  <span>Discover</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
